@@ -1,0 +1,51 @@
+{
+  "name": "m2v",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --require @babel/register",
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --history-api-fallback",
+    "build": "webpack",
+    "flow": "flow"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.4.3",
+    "ccapture.js": "^1.1.0",
+    "immutable": "^4.0.0-rc.12",
+    "mapbox": "^1.0.0-beta10",
+    "mapbox-gl": "^0.53.1",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-draggable": "^3.2.1",
+    "react-file-reader": "^1.1.4",
+    "react-redux": "^6.0.1",
+    "react-resizable": "^1.7.5",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.86.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-syntax-flow": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/polyfill": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.0",
+    "babel-loader": "^8.0.5",
+    "chai": "^4.2.0",
+    "css-loader": "^2.1.1",
+    "flow-bin": "^0.97.0",
+    "json-loader": "^0.5.7",
+    "rectify": "^0.1.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
