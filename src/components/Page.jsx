@@ -7,11 +7,20 @@ import FrameParams from './FrameParams.jsx'
 import Render from './Render.jsx'
 import Project from './Project.jsx'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import queryString from 'query-string';
+import { loadProjectFromUrl } from '../actions.js';
+import { connect } from 'react-redux'
 
 const mapboxgl = require('mapbox-gl');
 
 class Page extends Component {
-  
+  componentDidMount() {
+    const parameters = queryString.parse(location.search)
+    if (parameters.project != null) {
+      this.props.dispatch(loadProjectFromUrl(parameters.project))
+    }
+  }
+
   render() {
     return (
       <Router>
@@ -36,30 +45,31 @@ class Page extends Component {
                 exclusive="true"
                 width="thin"
               >
-              <Menu.Item as={Link} to="/project">
+              <Menu.Item as={Link} to="/m2v-site/project">
                 Project
               </Menu.Item>
-              <Menu.Item as={Link} to="/geodata">
+              <Menu.Item as={Link} to="/m2v-site/geodata">
                 GEO Data
               </Menu.Item>
-              <Menu.Item as={Link} to="/mapviewport">
+              <Menu.Item as={Link} to="/m2v-site/mapviewport">
                 Map viewport
               </Menu.Item>
-              <Menu.Item as={Link} to="/frameparams">
+              <Menu.Item as={Link} to="/m2v-site/frameparams">
                 Frame parameters
               </Menu.Item>
-              <Menu.Item as={Link} to="/render">
+              <Menu.Item as={Link} to="/m2v-site/render">
                 Render
               </Menu.Item>
             </Sidebar>
 
             <Sidebar.Pusher >
               <Route exact path="/" component={Project} />
-              <Route path="/project" component={Project} />
-              <Route path="/mapviewport" component={MapViewport} />
-              <Route path="/geodata" component={GeoData} />
-              <Route path="/frameparams" component={FrameParams} />
-              <Route path="/render" component={Render} />
+              <Route exact path="/m2v-site/" component={Project} />
+              <Route path="/m2v-site/project" component={Project} />
+              <Route path="/m2v-site/mapviewport" component={MapViewport} />
+              <Route path="/m2v-site/geodata" component={GeoData} />
+              <Route path="/m2v-site/frameparams" component={FrameParams} />
+              <Route path="/m2v-site/render" component={Render} />
             </Sidebar.Pusher>
           </Sidebar.Pushable>
         </div>
@@ -68,4 +78,4 @@ class Page extends Component {
   }
 }
 
-export default Page
+export default connect()(Page)

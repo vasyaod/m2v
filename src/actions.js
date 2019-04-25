@@ -12,12 +12,26 @@ export function resetProject() {
 }
 
 export function loadProject(jsonStr) {
-  
   return dispatch => {
     dispatch({
       type: 'PROJECT_LOADED',
       state: JSON.parse(jsonStr)
     })
+  }
+}
+
+export function loadProjectFromUrl(url) {
+  return dispatch => {
+    console.log("!!!!", url)
+
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        dispatch({
+          type: 'PROJECT_LOADED',
+          state: json
+        })
+      })
   }
 }
 
