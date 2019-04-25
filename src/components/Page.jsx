@@ -6,7 +6,7 @@ import GeoData from './GeoData.jsx'
 import FrameParams from './FrameParams.jsx'
 import Render from './Render.jsx'
 import Project from './Project.jsx'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Route, Link } from "react-router-dom";
 import queryString from 'query-string';
 import { loadProjectFromUrl } from '../actions.js';
 import { connect } from 'react-redux'
@@ -45,31 +45,30 @@ class Page extends Component {
                 exclusive="true"
                 width="thin"
               >
-              <Menu.Item as={Link} to="/m2v-site/project">
+              <Menu.Item as={Link} to="/project">
                 Project
               </Menu.Item>
-              <Menu.Item as={Link} to="/m2v-site/geodata">
+              <Menu.Item as={Link} to="/geodata">
                 GEO Data
               </Menu.Item>
-              <Menu.Item as={Link} to="/m2v-site/mapviewport">
+              <Menu.Item as={Link} to="/mapviewport">
                 Map viewport
               </Menu.Item>
-              <Menu.Item as={Link} to="/m2v-site/frameparams">
+              <Menu.Item as={Link} to="/frameparams">
                 Frame parameters
               </Menu.Item>
-              <Menu.Item as={Link} to="/m2v-site/render">
+              <Menu.Item as={Link} to="/render">
                 Render
               </Menu.Item>
             </Sidebar>
 
             <Sidebar.Pusher >
               <Route exact path="/" component={Project} />
-              <Route exact path="/m2v-site/" component={Project} />
-              <Route path="/m2v-site/project" component={Project} />
-              <Route path="/m2v-site/mapviewport" component={MapViewport} />
-              <Route path="/m2v-site/geodata" component={GeoData} />
-              <Route path="/m2v-site/frameparams" component={FrameParams} />
-              <Route path="/m2v-site/render" component={Render} />
+              <Route path="/project" component={Project} />
+              <Route path="/mapviewport" component={MapViewport} />
+              <Route path="/geodata" component={GeoData} />
+              <Route path="/frameparams" component={FrameParams} />
+              <Route path="/render" component={Render} />
             </Sidebar.Pusher>
           </Sidebar.Pushable>
         </div>

@@ -108,14 +108,20 @@ export function changeMask(value) {
   }
 }
 
-export function updateGeoEditor(centerLat, centerLng, zoom) {
+export function updateGeoEditorCenter(centerLat, centerLng) {
   return dispatch => {
     dispatch({
-      type: 'GEO_EDITOR_UPDATED',
-      value: {
-        center: [centerLng, centerLat],
-        zoom: zoom
-      }
+      type: 'GEO_EDITOR_CENTER_UPDATED',
+      value: [centerLng, centerLat]
+    })
+  }
+}
+
+export function updateGeoEditorZoom(zoom) {
+  return dispatch => {
+    dispatch({
+      type: 'GEO_EDITOR_ZOOM_UPDATED',
+      value: zoom
     })
   }
 }

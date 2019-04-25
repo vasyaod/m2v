@@ -3,7 +3,7 @@ import {Resizable, ResizableBox } from 'react-resizable';
 //import 'style-loader!css-loader!../css/styles.css';
 import { Table, Segment, Input, Button, Icon, Checkbox, Container, Form, Select } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { updateGeoEditor, addPoint, removePoint, replacePoint } from '../actions.js';
+import { updateGeoEditorCenter, updateGeoEditorZoom, addPoint, removePoint, replacePoint } from '../actions.js';
 
 import { renderComposedPaths } from '../render-utils.js';
 
@@ -163,9 +163,19 @@ class GeoData extends Component {
 
     map.on('moveend', e => {
       var center = map.getCenter();
-      var zoom = map.getZoom();
-      this.props.dispatch(updateGeoEditor(center.lat, center.lng, zoom))
+      if (center.lat != this.props.center[1] || 
+          center.lng != this.props.center[0]) {
+        this.props.dispatch(updateGeoEditorCenter(center.lat, center.lng))
+      }
     })
+
+    map.on('zoomend', e => {
+      var zoom = map.getZoom();
+      if (zoom != this.props.zoom){
+        this.props.dispatch(updateGeoEditorZoom(zoom))
+      }
+    })
+
     const self = this
     map.once('load', function () {
       self.loadData()
@@ -176,7 +186,9 @@ class GeoData extends Component {
   }
 
   loadData() {
-    
+    if (!this.map.loaded())
+      return
+
     renderComposedPaths(
       this.map, 
       this.state.currentTimePossition, 
@@ -245,7 +257,15 @@ class GeoData extends Component {
     if (this.props.points !== prevProps.points) {
       this.loadData()
     }
-  }
+
+    if (this.props.center !== prevProps.center) {
+      this.map.setCenter(this.props.center );
+    }
+    if (this.props.zoom !== prevProps.zoom) {
+      console.log("!!!", this.props.zoom)
+      this.map.setZoom(this.props.zoom)
+    }
+ }
   
   removePoint(pointId) {
     // Close editor.
@@ -455,8 +475,8 @@ const mapStateToProps = (state) => {
   return {
     points: state.points,
     paths: state.paths,
-    center: state.gioEditor.center,
-    zoom: state.gioEditor.zoom
+    center: state.geoEditorCenter,
+    zoom: state.geoEditorZoom
   };
 };
 

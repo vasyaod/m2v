@@ -2,10 +2,8 @@ import { combineReducers } from 'redux'
 import { List } from 'immutable'
 
 const initialState = {
-  gioEditor: {
-    center: [8.538961,47.372476],
-    zoom: 1
-  },
+  geoEditorCenter: [8.538961, 47.372476],
+  geoEditorZoom: 1,
   viewport: {
     width: 200,
     height: 200
@@ -70,9 +68,14 @@ export function todoApp(state = initialState, action) {
         mask: action.value
       })
 
-    case 'GEO_EDITOR_UPDATED':
+    case 'GEO_EDITOR_CENTER_UPDATED':
       return Object.assign({}, state, {
-        gioEditor: action.value
+        geoEditorCenter: action.value
+      })
+
+    case 'GEO_EDITOR_ZOOM_UPDATED':
+      return Object.assign({}, state, {
+        geoEditorZoom: action.value
       })
 
     case 'VIEWPORT_POSITION_UPDATED':
