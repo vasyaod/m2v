@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
 
-import CCapture from '@/../../node_modules/ccapture.js/src/CCapture.js'
+import CCapture from '../CCapture.js'
 
 const mapboxgl = require('mapbox-gl');
 
