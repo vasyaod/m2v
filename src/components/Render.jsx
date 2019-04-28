@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Input, Button } from 'semantic-ui-react'
+import { Segment, Header, Input, Button, Form } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
@@ -13,7 +13,8 @@ class Render extends Component {
     super(props);
     this.state = {
       scale: 1.0,
-      currentTimePossition: 0
+      currentTimePossition: 0,
+      isRendering: false
     }
   }
 
@@ -55,6 +56,10 @@ class Render extends Component {
   startRenderingOfVideo() {
     console.log("Start rendering")
     
+    this.setState({
+      isRendering: true
+    })
+
     const capturer = new CCapture({
       format: 'webm',
       framerate: 1
@@ -79,15 +84,31 @@ class Render extends Component {
     render()
   }
 
+  snapshot() {
+    console.log("Snapshot")
+    
+    this.frame.toBlob( blob => {
+      download( blob, "snapshot.png", 'image/png' );
+    }, 'image/png', 1.0 )
+  }
+
   stopRenderingOfVideo() {
     console.log("Stop rendering")
     this.capturer.stop()
     this.capturer.save()
+
+    this.setState({
+      isRendering: false
+    })
   }
 
   cancelRenderingOfVideo() {
     console.log("Cancel rendering")
     this.capturer.stop()
+
+    this.setState({
+      isRendering: false
+    })
   }
 
   setTimePosstion(value) {
@@ -109,10 +130,10 @@ class Render extends Component {
     const canvas1 = this.mapContainer.querySelector('canvas');
     var ctx = this.frame.getContext('2d');
     
-    ctx.beginPath();
-    ctx.rect(0, 0, this.frame.width, this.frame.height);
-    ctx.fillStyle = "#009933";
-    ctx.fill();
+//     ctx.beginPath();
+//     ctx.rect(0, 0, this.frame.width, this.frame.height);
+//  //   ctx.fillStyle = "#009933";
+//     ctx.fill();
 
     ctx.globalAlpha = this.props.opacity / 100;
     if (this.props.mask == "circle") {
@@ -186,12 +207,27 @@ class Render extends Component {
                   width = {this.props.frameWidth}
                 />
               </div>
-              <Input type="number" 
-                      value={this.state.currentTimePossition}
-                      onChange={(e, data) => this.setTimePosstion(parseInt(data.value))}/>
-                
-                <Button onClick={() => this.startRenderingOfVideo()}>Start render video</Button>
-                <Button onClick={() => this.cancelRenderingOfVideo()}>Cancel render video</Button>
+                <div>
+                  <Form.Input
+                    style={{width: "100%"}} 
+                    label={`Time: ${this.state.currentTimePossition}s `}
+                    min={0}
+                    max={this.props.points.size > 1 ? this.props.points.last().tm : 0}
+                    onChange={(e, data) => this.setTimePosstion(parseInt(data.value))}
+                    step={1}
+                    type='range'
+                    value={this.state.currentTimePossition}
+                  />
+                </div>
+                { !this.state.isRendering &&
+                  <div>
+                    <Button onClick={() => this.startRenderingOfVideo()}>Start render video</Button>
+                    <Button onClick={() => { this.snapshot() } }>Snapshot</Button>
+                  </div>
+                }
+                { this.state.isRendering &&
+                  <Button onClick={() => this.cancelRenderingOfVideo()}>Cancel render video</Button>
+                }
             </Segment>
           </div>
           <div className="four wide column">
