@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
 
-import CCapture from '../CCapture.js'
+//import CCapture from '../CCapture.js'
+import * as encoder from '../encoder-actions.js'
 
 const mapboxgl = require('mapbox-gl');
 
@@ -60,28 +61,32 @@ class Render extends Component {
       isRendering: true
     })
 
-    const capturer = new CCapture({
-      format: 'webm',
-      framerate: 1
-    });
-    capturer.start();
-    this.capturer = capturer
-
     const t = maxTime(this.props.points)
-    const render = () => {
+    const render = (encodeId) => {
       if (this.state.currentTimePossition < t) {
-        requestAnimationFrame(render);
+//        requestAnimationFrame(render);
         this.setTimePosstion(this.state.currentTimePossition + 1)
         this.refreshPreview() 
+        console.log("!!!!")
         // rendering stuff ...
-        capturer.capture(this.frame);
+        const blob = this.frame.toBlob(async (blob) => {
+          console.log("!!!!+", blob)
+          await encoder.saveFrame(encodeId, this.state.currentTimePossition, blob)
+          console.log("!!!!++")
+          render(encodeId)
+          console.log("!!!!+++")
+        })
       } else {
-        this.stopRenderingOfVideo()
+        this.stopRenderingOfVideo(encodeId)
       }
     }
     
     this.setTimePosstion(0)
-    render()
+    encoder
+      .startEncoding()
+      .then( encodeId =>
+        render(encodeId)
+      )
   }
 
   snapshot() {
@@ -92,10 +97,10 @@ class Render extends Component {
     }, 'image/png', 1.0 )
   }
 
-  stopRenderingOfVideo() {
+  stopRenderingOfVideo(encodeId) {
     console.log("Stop rendering")
-    this.capturer.stop()
-    this.capturer.save()
+    const url = "http://localhost:8081"
+    window.location.assign(`${url}/video/${encodeId}`);
 
     this.setState({
       isRendering: false
