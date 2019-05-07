@@ -7,6 +7,7 @@
     "test": "./node_modules/.bin/mocha --require @babel/register",
     "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --history-api-fallback",
     "build": "webpack",
+    "build-desktop": "webpack --config ./webpack.desktop.config.js",
     "flow": "flow"
   },
   "author": "",
@@ -15,6 +16,7 @@
     "ccapture.js": "^1.1.0",
     "electron": "^5.0.0",
     "immutable": "^4.0.0-rc.12",
+    "is-electron": "^2.2.0",
     "mapbox": "^1.0.0-beta10",
     "mapbox-gl": "^0.53.1",
     "query-string": "^6.4.2",
@@ -48,6 +50,7 @@
     "rectify": "^0.1.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
+    "webpack-preprocessor-loader": "^1.1.0",
     "webpack-dev-server": "^3.2.1"
   }
 }

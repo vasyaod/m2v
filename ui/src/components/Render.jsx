@@ -3,6 +3,8 @@ import { Segment, Header, Input, Button, Form } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
+import isElectron from 'is-electron';
+import electron, { remote } from 'electron'
 
 //import CCapture from '../CCapture.js'
 import * as encoder from '../encoder-actions-server.js'
@@ -96,11 +98,21 @@ class Render extends Component {
   stopRenderingOfVideo(encodeId) {
     console.log("Stop rendering")
     const url = "http://localhost:8081"
-    window.location.assign(`${url}/video/${encodeId}`);
 
-    this.setState({
-      isRendering: false
-    })
+    if(isElectron()) {
+      /* #!if isElectron */
+      const ipcRenderer = electron.ipcRenderer
+      ipcRenderer.send("download", {
+        url: `${url}/video/${encodeId}`,
+        properties: {directory: "~/"}
+      })
+     /* #!endif */
+    } else {
+      window.location.assign(`${url}/video/${encodeId}`);
+      this.setState({
+        isRendering: false
+      })
+    }
   }
 
   cancelRenderingOfVideo() {

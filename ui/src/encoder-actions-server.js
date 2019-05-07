@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 
-const url = "http://localhost:8081"
+const url = "http://localhost:8882"
 
 export async function startEncoding() {
   const response = await fetch(`${url}/video`, {

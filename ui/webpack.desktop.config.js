@@ -2,6 +2,7 @@ module.exports = {
   context: __dirname,
 
   entry: "./src/index.jsx",
+  target: 'electron-renderer',
 
   output: {
     filename: "bundle.js",
@@ -24,11 +25,12 @@ module.exports = {
             loader: 'webpack-preprocessor-loader',
             options: {
               params: {
-                isElectron: false
+                ENV: process.env.NODE_ENV,
+                isElectron: true
               },
               verbose: false
             }
-          }
+          },
         ]
       }
     ]

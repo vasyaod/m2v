@@ -3,7 +3,11 @@ import {app, BrowserWindow, Menu, Tray} from 'electron'
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
 import path from 'path'
+const electronDl = require('electron-dl');
+
 require('./api.js')
+
+electronDl()
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,6 +23,7 @@ const createWindow = () => {
       show: false,
       webPreferences: {
         webSecurity: false,
+        nodeIntegration: true,
         allowRunningInsecureContent: true
       },
 //      icon: __dirname + '/icon/ic_launcher.png',
