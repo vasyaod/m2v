@@ -3,6 +3,7 @@ import {app, BrowserWindow, Menu, Tray} from 'electron'
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
 import path from 'path'
+require('./api.js')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -90,9 +91,9 @@ app.on('ready', () => {
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  //if (process.platform !== 'darwin') {
-  //  app.exit(0)
-  //}
+  if (process.platform !== 'darwin') {
+    app.exit(0)
+  }
 })
 
 app.on('activate', function () {

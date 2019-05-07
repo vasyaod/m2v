@@ -5,7 +5,7 @@ import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
 
 //import CCapture from '../CCapture.js'
-import * as encoder from '../encoder-actions.js'
+import * as encoder from '../encoder-actions-server.js'
 
 const mapboxgl = require('mapbox-gl');
 
@@ -67,14 +67,10 @@ class Render extends Component {
 //        requestAnimationFrame(render);
         this.setTimePosstion(this.state.currentTimePossition + 1)
         this.refreshPreview() 
-        console.log("!!!!")
         // rendering stuff ...
         const blob = this.frame.toBlob(async (blob) => {
-          console.log("!!!!+", blob)
           await encoder.saveFrame(encodeId, this.state.currentTimePossition, blob)
-          console.log("!!!!++")
           render(encodeId)
-          console.log("!!!!+++")
         })
       } else {
         this.stopRenderingOfVideo(encodeId)
