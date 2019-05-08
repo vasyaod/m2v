@@ -4,7 +4,10 @@ import { connect } from 'react-redux'
 import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
 import isElectron from 'is-electron';
+
+/* #!if isElectron */
 import electron, { remote } from 'electron'
+/* #!endif */
 
 //import CCapture from '../CCapture.js'
 import * as encoder from '../encoder-actions-server.js'
@@ -97,14 +100,13 @@ class Render extends Component {
 
   stopRenderingOfVideo(encodeId) {
     console.log("Stop rendering")
-    const url = "http://localhost:8081"
+    const url = "http://localhost:8882"
 
     if(isElectron()) {
       /* #!if isElectron */
       const ipcRenderer = electron.ipcRenderer
       ipcRenderer.send("download", {
-        url: `${url}/video/${encodeId}`,
-        properties: {directory: "~/"}
+        url: `${url}/video/${encodeId}`
       })
      /* #!endif */
     } else {

@@ -1,13 +1,13 @@
 // Modules to control application life and create native browser window
-import {app, BrowserWindow, Menu, Tray} from 'electron'
+import {app, BrowserWindow, Menu, Tray, ipcMain} from 'electron'
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
 import path from 'path'
-const electronDl = require('electron-dl');
+const {download} = require('electron-dl');
 
 require('./api.js')
 
-electronDl()
+//electronDl()
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -28,6 +28,7 @@ const createWindow = () => {
       },
 //      icon: __dirname + '/icon/ic_launcher.png',
     })
+    
     mainWindow.setMenu(null);
     mainWindow.maximize()
     mainWindow.show()
@@ -45,6 +46,15 @@ const createWindow = () => {
       // when you should delete the corresponding element.
       mainWindow = null
     })
+    
+    ipcMain.on("download", async (event, {url}) => {
+      const win = BrowserWindow.getFocusedWindow();
+      console.log(await download(win, url, {
+        saveAs: true,
+        directory: "~/",
+        filename: "map.mg4"
+      }));
+    });
   } else {
     mainWindow.maximize()
     mainWindow.show()

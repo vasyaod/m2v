@@ -79,6 +79,6 @@ app.get('/video/:encodeId', async (req, res) => {
   proc.on('close', function (code) {
     var code = parseInt(code);
     console.log("Return code: " + code)
-    res.sendFile(resolve(outputFile))
+    res.download(resolve(outputFile), "map.mp4", {headers: {'Content-Type': 'video/mp4'}})
   });
 })
