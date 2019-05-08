@@ -5,7 +5,7 @@ const exec = require('child_process').exec;
 import path from 'path'
 const {download} = require('electron-dl');
 
-require('./api.js')
+require('../../encode-server/main.js')
 
 //electronDl()
 
