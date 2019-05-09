@@ -73,13 +73,17 @@ app.get('/video/:encodeId', async (req, res) => {
   const { encodeId } = req.params
 
   const dir = `${tmpDir}/${encodeId}`
-  const outputFile = `${dir}/output.mp4`
+  const outputFile = `${dir}/output.webm`
   const cmd = ffmpeg.path;
+  
+  //ffmpeg -framerate 25 -f image2 -i frames/%03d.png -c:v libvpx -pix_fmt yuva420p output.webm
   const args = [
     "-framerate", 1,
     "-pattern_type", "sequence",
-    "-start_number", "0",
+    "-start_number", "1",
     "-i", `${dir}/frame-%d.png`,
+    "-c:v", "libvpx-vp9",
+    "-pix_fmt", "yuva420p",
     "-y",
     outputFile
   ];
@@ -90,7 +94,7 @@ app.get('/video/:encodeId', async (req, res) => {
     var code = parseInt(code);
     console.log("Return code: " + code)
 //    res.send('Ok')
-    res.download(resolve(outputFile), "map.mp4", {headers: {'Content-Type': 'video/mp4'}})
+    res.download(resolve(outputFile), "map.webm", {headers: {'Content-Type': 'video/mp4'}})
   });
 })
 
