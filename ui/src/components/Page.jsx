@@ -6,6 +6,7 @@ import GeoData from './GeoData.jsx'
 import FrameParams from './FrameParams.jsx'
 import Render from './Render.jsx'
 import Project from './Project.jsx'
+import Components from './Components.jsx'
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import queryString from 'query-string';
 import { loadProjectFromUrl } from '../actions.js';
@@ -57,6 +58,9 @@ class Page extends Component {
               <Menu.Item as={Link} to="/frameparams">
                 Frame parameters
               </Menu.Item>
+              <Menu.Item as={Link} to="/components">
+                Components
+              </Menu.Item>
               <Menu.Item as={Link} to="/render">
                 Render
               </Menu.Item>
@@ -68,6 +72,7 @@ class Page extends Component {
               <Route path="/mapviewport" component={MapViewport} />
               <Route path="/geodata" component={GeoData} />
               <Route path="/frameparams" component={FrameParams} />
+              <Route path="/components" component={Components} />
               <Route path="/render" component={Render} />
             </Sidebar.Pusher>
           </Sidebar.Pushable>
