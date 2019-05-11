@@ -4,6 +4,13 @@ import { connect } from 'react-redux'
 import Map from './Map.jsx'
 import HelloWorld from './HelloWorld.jsx'
 import Draggable from 'react-draggable'
+import {Resizable, ResizableBox } from 'react-resizable';
+import { Rnd } from "react-rnd"
+
+const style = {
+  display: "flex",
+  border: "solid 1px #ddd"
+};
 
 class Components extends Component {
   constructor(props) {
@@ -18,10 +25,10 @@ class Components extends Component {
       "map": Map
     }
 
-    // this.objects = [
-    //   <HelloWorld/>
-    //   <Map/>
-    // ]
+    this.objects = [
+      <HelloWorld/>,
+      <Map/>
+    ]
   }
 
   render() {
@@ -31,33 +38,22 @@ class Components extends Component {
           <div className="ten wide column">
             <Segment basic>
               <Header as='h3'>Render1</Header>
-              <div 
-                ref={el => this.frameContainer = el} 
-                style={{
+              <div style={{
                   position: "relative",
                   width: "100%",
-                  height: 600,
+                  height: 500,
                   float: "left",
                   overflow: "hidden",
-//                  zoom: this.state.scale,
                   background: "url('./images/bg.png')"
-                }}>
-                  <Map/>
-                  <Draggable><HelloWorld/></Draggable>
-                {/* {this.objects.map(obj => {
+                }}
+              >
+                {this.objects.map(obj => {
                   return (
-                    <Draggable 
-                      position = {{
-                        x: 100, 
-                        y: 100
-                      }}
-                      bounds = "parent"
-                      // onDrag = {(e,data) => this.setPosition(data.x, data.y)}
-                    >
-                      {obj}
-                    </Draggable>
+                    <Rnd style={style}>
+                       {obj}
+                    </Rnd>
                   )
-                })} */}
+                })}
               </div>
             </Segment>
           </div>

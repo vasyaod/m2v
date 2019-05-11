@@ -2,14 +2,6 @@
 import { List } from 'immutable'
 import * as osm from './osm.js'
 
-type Point = { 
-  id: number,
-  tm: number,
-  lng: number,
-  lat: number,
-  pathType: string,
-};
-
 /**
  * Returns next ID from point list. This is nessosary for generation of
  * a new ID.
@@ -35,7 +27,7 @@ export function maxTime(points) {
 /**
  * Return a point by it's ID 
  */
-export function pointById(pointId: number, points: List<Point>): Point {
+export function pointById(pointId, points) {
   return points.find(p => p.id == pointId)
 }
 
