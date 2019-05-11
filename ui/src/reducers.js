@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { List } from 'immutable'
 
 const initialState = {
+  components: List([]),
   geoEditorCenter: [8.538961, 47.372476],
   geoEditorZoom: 1,
   viewport: {
@@ -45,12 +46,17 @@ export function todoApp(state = initialState, action) {
         })
       })
 
-     case 'MAP_VIEWPORT_RESIZED':
-     return Object.assign({}, state, {
+    case 'MAP_VIEWPORT_RESIZED':
+      return Object.assign({}, state, {
         viewport: {
           width: action.width,
           height: action.height
         }
+      })
+
+    case 'COMPONENT_ADDED':
+      return Object.assign({}, state, {
+        components: state.components.push(action.component)
       })
 
     case 'FRAME_CHANDED':

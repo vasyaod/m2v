@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Segment, Header} from 'semantic-ui-react'
+import { Segment, Header, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import Map from './Map.jsx'
 import HelloWorld from './HelloWorld.jsx'
 import Draggable from 'react-draggable'
 import {Resizable, ResizableBox } from 'react-resizable';
 import { Rnd } from "react-rnd"
+import { addComponent } from '../actions.js';
 
 const style = {
   display: "flex",
@@ -20,15 +21,6 @@ class Components extends Component {
       currentTimePossition: 0,
       isRendering: false
     }
-
-    this.components = {
-      "map": Map
-    }
-
-    this.objects = [
-      <HelloWorld/>,
-      <Map/>
-    ]
   }
 
   render() {
@@ -47,15 +39,20 @@ class Components extends Component {
                   background: "url('./images/bg.png')"
                 }}
               >
-                {this.objects.map(obj => {
+                {this.props.components.map(comp => {
                   return (
-                    <Rnd style={style}>
-                       {obj}
+                    <Rnd style={style} key={comp.id}>
+                       {comp.type == "map" && <Map params={comp.params}/>}
+                       {comp.type == "hello-world" && <HelloWorld params={comp.params}/>}
                     </Rnd>
                   )
                 })}
               </div>
             </Segment>
+            <div>
+              <Button onClick={() => this.props.dispatch(addComponent("map", "1", {}))}>Add map</Button>
+              <Button onClick={() => this.props.dispatch(addComponent("hello-world", "2", {}))}>Add HelloWorld</Button>
+            </div>
           </div>
           <div className="four wide column">
 
@@ -68,18 +65,7 @@ class Components extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    viewportWidth: state.viewport.width,
-    viewportHeight: state.viewport.height,
-    opacity: state.opacity,
-    mask: state.mask,
-    center: state.viewportPosition.center,
-    zoom: state.viewportPosition.zoom,
-    frameWidth: state.frame.width,
-    frameHeight: state.frame.height,
-    viewportX: state.frame.viewportX,
-    viewportY: state.frame.viewportY,
-    points: state.points,
-    paths: state.paths
+    components: state.components
   };
 };
 

@@ -22,8 +22,6 @@ export function loadProject(jsonStr) {
 
 export function loadProjectFromUrl(url) {
   return dispatch => {
-    console.log("!!!!", url)
-
     fetch(url)
       .then(res => res.json())
       .then(json => {
@@ -32,6 +30,19 @@ export function loadProjectFromUrl(url) {
           state: json
         })
       })
+  }
+}
+
+export function addComponent(type, id, params) {
+  return dispatch => {
+    dispatch({
+      type: 'COMPONENT_ADDED',
+      component: {
+        type: type,
+        id: id,
+        params: params
+      }
+    })
   }
 }
 
