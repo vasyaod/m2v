@@ -46,6 +46,25 @@ export function addComponent(type, id, params) {
   }
 }
 
+export function updateComponent(id, params) {
+  return dispatch => {
+    dispatch({
+      type: 'COMPONENT_UPDATED',
+      id: id,
+      params: params
+    })
+  }
+}
+
+export function removeComponent(id) {
+  return dispatch => {
+    dispatch({
+      type: 'COMPONENT_REMOVED',
+      id: id
+    })
+  }
+}
+
 export function resizeViewport(width, height) {
   return dispatch => {
     dispatch({

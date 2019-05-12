@@ -3,10 +3,8 @@ import { Segment, Header, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import Map from './Map.jsx'
 import HelloWorld from './HelloWorld.jsx'
-import Draggable from 'react-draggable'
-import {Resizable, ResizableBox } from 'react-resizable';
 import { Rnd } from "react-rnd"
-import { addComponent } from '../actions.js';
+import { addComponent, updateComponent } from '../actions.js';
 
 const style = {
   display: "flex",
@@ -41,18 +39,33 @@ class Components extends Component {
               >
                 {this.props.components.map(comp => {
                   return (
-                    <Rnd style={style} key={comp.id}>
-                       {comp.type == "map" && <Map params={comp.params}/>}
-                       {comp.type == "hello-world" && <HelloWorld params={comp.params}/>}
+                    <Rnd 
+                      style={style} 
+                      key={comp.id}
+                      position={{ 
+                        x: comp.params.x == null ? 0: comp.params.x, 
+                        y: comp.params.y == null ? 0: comp.params.y 
+                      }}
+                      onDragStop={(e, d) => this.props.dispatch(updateComponent(comp.id, {...comp.params, x: d.x, y: d.y})) }
+                      onResize={(e, direction, ref, delta, position) => {
+                        this.props.dispatch(updateComponent(comp.id, {
+                          ...comp.params, 
+                          width: ref.style.width, 
+                          height: ref.style.height
+                        }))
+                      }}
+                    >
+                       {comp.type == "map" && <Map comp={comp}/>}
+                       {comp.type == "hello-world" && <HelloWorld comp={comp}/>}
                     </Rnd>
                   )
                 })}
               </div>
+              <div>
+                <Button onClick={() => this.props.dispatch(addComponent("map", "1", {}))}>Add map</Button>
+                <Button onClick={() => this.props.dispatch(addComponent("hello-world", "2", {}))}>Add HelloWorld</Button>
+              </div>
             </Segment>
-            <div>
-              <Button onClick={() => this.props.dispatch(addComponent("map", "1", {}))}>Add map</Button>
-              <Button onClick={() => this.props.dispatch(addComponent("hello-world", "2", {}))}>Add HelloWorld</Button>
-            </div>
           </div>
           <div className="four wide column">
 
