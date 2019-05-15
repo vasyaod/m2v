@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {resizeViewport, changeOpacity, changeMask, updatePossitionOfViewport} from '../actions.js';
-import { renderComposedPaths } from '../render-utils.js';
+import { renderComposedPaths } from '../../render-utils.js';
 
 const mapboxgl = require('mapbox-gl');
 
@@ -17,7 +16,7 @@ class Map extends Component {
       preserveDrawingBuffer: true
     });
     this.map = map
-  
+
     this.map.on("render", () => {
       this.refreshPreview()
     });
@@ -55,14 +54,28 @@ class Map extends Component {
     ctx.drawImage(canvas1, 0, 0);
   }
 
+  getWidth() {
+    return this.props.comp.params.width == null ? 200 : this.props.comp.params.width
+  }
+
+  getHeight() {
+    return this.props.comp.params.height == null ? 200 : this.props.comp.params.height
+  }
+
   render() {
+    console.log(this.getWidth(), this.getHeight())
+
     return (
       <div style={{
-          height: 200,
-          width: 200,
+        width: this.getWidth(),
+        height: this.getHeight()
         //  display: "none"
-        }}>
-        <canvas ref={el => this.canvas = el} style={{background: "url('./images/bg.png')"}}/>
+        }}
+      >
+        <canvas 
+          ref={el => this.canvas = el} 
+          style={{background: "url('./images/bg.png')"}}
+        />
         <div style={{
           height: 0,
           width: 0,
@@ -70,10 +83,13 @@ class Map extends Component {
           overflow: "hidden",
         }}>
           <div style={{
-            height: 200,
-            width: 200,
-          //  display: "none"
-          }} ref="mapContainer" ref={el => this.mapContainer = el}/>
+              width: this.getWidth(),
+              height: this.getHeight(),
+            //  display: "none"
+            }} 
+            ref="mapContainer" 
+            ref={el => this.mapContainer = el}
+          />
         </div>
       </div>
     );

@@ -61,17 +61,19 @@ export function todoApp(state = initialState, action) {
     
     case 'COMPONENT_UPDATED':
       console.log("!!!!!!", action)
-      return Object.assign({}, state, {
+      return {
+        ...state,
         components: state.components.map(comp => {
           if(comp.id == action.id) {
-            return Object.assign({}, comp, {
+            return {
+              ...comp,
               params: action.params
-            })
+            }
           } else {
             return comp
           }
         })
-      })
+      }
 
     case 'FRAME_CHANDED':
       return Object.assign({}, state, {

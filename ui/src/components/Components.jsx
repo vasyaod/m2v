@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Segment, Header, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import Map from './Map.jsx'
+import Map from './map/Map.jsx'
+import MapProps from './map/MapProps.jsx'
 import HelloWorld from './HelloWorld.jsx'
 import { Rnd } from "react-rnd"
 import { addComponent, updateComponent } from '../actions.js';
+import * as UUID from 'uuid-js';
 
 const style = {
   display: "flex",
@@ -12,15 +14,23 @@ const style = {
 };
 
 class Components extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       scale: 1.0,
       currentTimePossition: 0,
-      isRendering: false
+      isRendering: false,
+      compParams: null
     }
   }
 
+  componentResize(comp, widthStr, heightStr) {
+    this.props.dispatch(updateComponent(comp, {
+      width: parseInt(widthStr.replace(/px/, '')), 
+      height: parseInt(heightStr.replace(/px/, ''))
+    }))
+  }
   render() {
     return (
       <div>
@@ -46,14 +56,11 @@ class Components extends Component {
                         x: comp.params.x == null ? 0: comp.params.x, 
                         y: comp.params.y == null ? 0: comp.params.y 
                       }}
-                      onDragStop={(e, d) => this.props.dispatch(updateComponent(comp.id, {...comp.params, x: d.x, y: d.y})) }
+                      onDragStop={(e, d) => this.props.dispatch(updateComponent(comp, {x: d.x, y: d.y})) }
                       onResize={(e, direction, ref, delta, position) => {
-                        this.props.dispatch(updateComponent(comp.id, {
-                          ...comp.params, 
-                          width: ref.style.width, 
-                          height: ref.style.height
-                        }))
+                        this.componentResize(comp, ref.style.width, ref.style.height)
                       }}
+                      onDoubleClick={e => this.setState({compParams: comp})}
                     >
                        {comp.type == "map" && <Map comp={comp}/>}
                        {comp.type == "hello-world" && <HelloWorld comp={comp}/>}
@@ -62,10 +69,25 @@ class Components extends Component {
                 })}
               </div>
               <div>
-                <Button onClick={() => this.props.dispatch(addComponent("map", "1", {}))}>Add map</Button>
-                <Button onClick={() => this.props.dispatch(addComponent("hello-world", "2", {}))}>Add HelloWorld</Button>
+                <Button onClick={() => this.props.dispatch(addComponent("map", UUID.create().toString(), {}))}>Add map</Button>
+                <Button onClick={() => this.props.dispatch(addComponent("hello-world", UUID.create().toString(), {}))}>Add HelloWorld</Button>
               </div>
-            </Segment>
+            </Segment> 
+            { this.state.compParams &&
+              <div>
+                { this.state.compParams.type == "map" && 
+                  <MapProps 
+                    comp={this.state.compParams} 
+                    onChanged={params => this.props.dispatch(updateComponent(comp, params))}
+                    onClose={e => this.setState({compParams: null})}
+                  />
+                }
+                { this.state.compParams.type == "hello-world" && 
+                  <MapProps 
+                    comp={this.state.compParams} onChanged={params => this.props.dispatch(updateComponent(comp, params))}/>
+                }
+              </div>
+            }
           </div>
           <div className="four wide column">
 

@@ -1,7 +1,7 @@
 //import utils from './utils.js'
 import { List } from 'immutable'
 import * as utils from '../src/utils.js'
-
+import * as equal from 'deep-equal'
 
 export function resetProject() {
   return dispatch => {
@@ -46,13 +46,17 @@ export function addComponent(type, id, params) {
   }
 }
 
-export function updateComponent(id, params) {
+export function updateComponent(comp, params) {
   return dispatch => {
-    dispatch({
-      type: 'COMPONENT_UPDATED',
-      id: id,
-      params: params
-    })
+    const newParams = Object.assign({}, comp.params, params)
+    if (!equal(comp.params, newParams)) {
+      console.log(comp.params, newParams)
+      dispatch({
+        type: 'COMPONENT_UPDATED',
+        id: comp.id,
+        params: params
+      })
+    }
   }
 }
 

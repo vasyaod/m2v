@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "ccapture.js": "^1.1.0",
+    "deep-equal": "^1.0.1",
     "electron": "^5.0.0",
     "immutable": "^4.0.0-rc.12",
     "is-electron": "^2.2.0",
@@ -31,7 +32,8 @@
     "react-router-dom": "^5.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-react": "^0.86.0"
+    "semantic-ui-react": "^0.86.0",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
