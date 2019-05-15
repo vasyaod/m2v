@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Segment, Header, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import Map from './map/Map.jsx'
-import MapProps from './map/MapProps.jsx'
+import Map from './map/Comp.jsx'
+import MapProps from './map/Props.jsx'
 import HelloWorld from './HelloWorld.jsx'
 import { Rnd } from "react-rnd"
 import { addComponent, updateComponent } from '../actions.js';
@@ -12,6 +12,15 @@ const style = {
   display: "flex",
   border: "solid 1px #ddd"
 };
+
+const components = [
+  { 
+    id: "map",
+    comp: Map,
+    props: MapProps,
+    defaultParams: require('./map/DefaultParams.js')
+  }
+]
 
 class Components extends Component {
   
@@ -23,6 +32,7 @@ class Components extends Component {
       isRendering: false,
       compParams: null
     }
+
   }
 
   componentResize(comp, widthStr, heightStr) {
@@ -48,6 +58,8 @@ class Components extends Component {
                 }}
               >
                 {this.props.components.map(comp => {
+                  const compTemplate = components.find(x => comp.type == x.id)
+                  const Comp = compTemplate.comp
                   return (
                     <Rnd 
                       style={style} 
@@ -62,15 +74,19 @@ class Components extends Component {
                       }}
                       onDoubleClick={e => this.setState({compParams: comp})}
                     >
-                       {comp.type == "map" && <Map comp={comp}/>}
-                       {comp.type == "hello-world" && <HelloWorld comp={comp}/>}
+                       <Comp comp={comp}/>}
                     </Rnd>
                   )
                 })}
               </div>
               <div>
-                <Button onClick={() => this.props.dispatch(addComponent("map", UUID.create().toString(), {}))}>Add map</Button>
-                <Button onClick={() => this.props.dispatch(addComponent("hello-world", UUID.create().toString(), {}))}>Add HelloWorld</Button>
+                { 
+                  components.map(c => {
+                    return (
+                      <Button key={c.id} onClick={() => this.props.dispatch(addComponent(c.id, UUID.create().toString(), {}))}>Add {c.id}</Button>
+                    );
+                  })
+                }
               </div>
             </Segment> 
             { this.state.compParams &&
