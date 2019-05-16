@@ -55,11 +55,11 @@ class Map extends Component {
   }
 
   getWidth() {
-    return this.props.comp.params.width == null ? 200 : this.props.comp.params.width
+    return this.props.comp.params.width
   }
 
   getHeight() {
-    return this.props.comp.params.height == null ? 200 : this.props.comp.params.height
+    return this.props.comp.params.height
   }
 
   render() {

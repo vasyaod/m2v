@@ -15,10 +15,10 @@ const style = {
 
 const components = [
   { 
-    id: "map",
+    type: "map",
     comp: Map,
     props: MapProps,
-    defaultParams: require('./map/DefaultParams.js')
+    defaultParams: require('./map/DefaultParams.js').default
   }
 ]
 
@@ -58,7 +58,7 @@ class Components extends Component {
                 }}
               >
                 {this.props.components.map(comp => {
-                  const compTemplate = components.find(x => comp.type == x.id)
+                  const compTemplate = components.find(x => comp.type == x.type)
                   const Comp = compTemplate.comp
                   return (
                     <Rnd 
@@ -68,7 +68,9 @@ class Components extends Component {
                         x: comp.params.x == null ? 0: comp.params.x, 
                         y: comp.params.y == null ? 0: comp.params.y 
                       }}
-                      onDragStop={(e, d) => this.props.dispatch(updateComponent(comp, {x: d.x, y: d.y})) }
+                      onDragStop={(e, d) => {
+                        this.props.dispatch(updateComponent(comp, {x: d.x, y: d.y})) 
+                      }}
                       onResize={(e, direction, ref, delta, position) => {
                         this.componentResize(comp, ref.style.width, ref.style.height)
                       }}
@@ -83,7 +85,9 @@ class Components extends Component {
                 { 
                   components.map(c => {
                     return (
-                      <Button key={c.id} onClick={() => this.props.dispatch(addComponent(c.id, UUID.create().toString(), {}))}>Add {c.id}</Button>
+                      <Button key={c.type} onClick={() => 
+                        this.props.dispatch(addComponent(c.type, UUID.create().toString(), c.defaultParams))
+                      }>Add {c.type}</Button>
                     );
                   })
                 }
@@ -91,17 +95,15 @@ class Components extends Component {
             </Segment> 
             { this.state.compParams &&
               <div>
-                { this.state.compParams.type == "map" && 
-                  <MapProps 
-                    comp={this.state.compParams} 
-                    onChanged={params => this.props.dispatch(updateComponent(comp, params))}
-                    onClose={e => this.setState({compParams: null})}
-                  />
-                }
-                { this.state.compParams.type == "hello-world" && 
-                  <MapProps 
-                    comp={this.state.compParams} onChanged={params => this.props.dispatch(updateComponent(comp, params))}/>
-                }
+                {(() => {
+                    const compTemplate = components.find(x => x.type == this.state.compParams.type)
+                    const Comp = compTemplate.props
+                    return (<Comp
+                      comp={this.state.compParams} 
+                      onChanged={params => this.props.dispatch(updateComponent(comp, params))}
+                      onClose={e => this.setState({compParams: null})}
+                    />)
+                })()}
               </div>
             }
           </div>

@@ -60,7 +60,6 @@ export function todoApp(state = initialState, action) {
       })
     
     case 'COMPONENT_UPDATED':
-      console.log("!!!!!!", action)
       return {
         ...state,
         components: state.components.map(comp => {

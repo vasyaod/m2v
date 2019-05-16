@@ -50,11 +50,10 @@ export function updateComponent(comp, params) {
   return dispatch => {
     const newParams = Object.assign({}, comp.params, params)
     if (!equal(comp.params, newParams)) {
-      console.log(comp.params, newParams)
       dispatch({
         type: 'COMPONENT_UPDATED',
         id: comp.id,
-        params: params
+        params: newParams
       })
     }
   }

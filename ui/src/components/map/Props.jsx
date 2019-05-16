@@ -4,7 +4,7 @@ import { Segment, Header, Input, Button, Form, Modal } from 'semantic-ui-react'
 
 const mapboxgl = require('mapbox-gl');
 
-class Map extends Component {
+class Props extends Component {
   
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1IjoidnZhemhlc292IiwiYSI6ImNqdHBpdnUxcTA1NXk0MXBjMTl4OHJlOWgifQ.J262J1QTtrGIlylAXKTYSQ';
@@ -18,25 +18,28 @@ class Map extends Component {
     this.map = map
   }
 
+  params() {
+    return this.props.comp.params
+  }
+
   getWidth() {
-    return this.props.comp.params.width == null ? 200 : this.props.comp.params.width
+    return this.props.comp.params.width
   }
 
   getHeight() {
-    return this.props.comp.params.height == null ? 200 : this.props.comp.params.height
+    return this.props.comp.params.height
   }
 
   render() {
-    console.log(this.getWidth(), this.getHeight())
-
     return (
       <Modal open={true} onClose={e => this.props.onClose()}>
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content>
           <Segment basic>
-                <div style={{
-                width: this.getWidth(),
-                height: this.getHeight(),
+            <div><label>Set position</label></div>
+            <div style={{
+                width: this.params().width,
+                height: this.params().height,
               //  display: "none"
               }} 
               ref="mapContainer" 
@@ -45,15 +48,15 @@ class Map extends Component {
             
             <div><label>Width</label></div>
             <Input type="number" 
-                  value={this.props.comp.params.width} 
+                  value={this.params().width} 
                   />
             <div><label>Height</label></div>
             <Input type="number" 
-                  value={this.props.comp.params.height}
+                  value={this.params().height}
                   />
             <div><label>Opacity</label></div>
             <Input type="number" 
-                  value={this.props.comp.params.opacity}
+                  value={this.params().opacity}
               />
           </Segment>
         </Modal.Content>
@@ -67,4 +70,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Map)
+export default connect(mapStateToProps)(Props)
