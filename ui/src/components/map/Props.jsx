@@ -32,7 +32,7 @@ class Props extends Component {
 
   render() {
     return (
-      <Modal open={true} onClose={e => this.props.onClose()}>
+      <Modal open={true} onClose={this.props.onCanceled}>
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content>
           <Segment basic>
@@ -47,19 +47,33 @@ class Props extends Component {
             />
             
             <div><label>Width</label></div>
-            <Input type="number" 
-                  value={this.params().width} 
-                  />
+            <Input 
+              type="number" 
+              value={this.params().width} 
+              onChange={(e, data) => this.props.onChanged({width: parseInt(data.value)})}
+            />
             <div><label>Height</label></div>
-            <Input type="number" 
-                  value={this.params().height}
-                  />
+            <Input 
+              type="number" 
+              value={this.params().height}
+              onChange={(e, data) => this.props.onChanged({height: parseInt(data.value)})}
+            />
             <div><label>Opacity</label></div>
-            <Input type="number" 
-                  value={this.params().opacity}
-              />
+            <Input 
+              type="number" 
+              value={this.params().opacity}
+              onChange={(e, data) => this.props.onChanged({opacity: parseInt(data.value)})}
+            />
           </Segment>
         </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={this.props.onCanceled}>
+            Cancel
+          </Button>
+          <Button basic onClick={this.props.onApplyed}>
+            Apply
+          </Button>
+        </Modal.Actions>
       </Modal>
     );
   }

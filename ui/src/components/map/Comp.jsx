@@ -29,7 +29,7 @@ class Map extends Component {
     this.canvas.width = canvas1.width;
     this.canvas.height = canvas1.height;
 
-    ctx.globalAlpha = this.props.opacity/100;
+    ctx.globalAlpha = this.props.comp.params.opacity/100;
     if (this.props.mask == "circle") {
       ctx.beginPath();
       ctx.arc(
@@ -62,9 +62,14 @@ class Map extends Component {
     return this.props.comp.params.height
   }
 
-  render() {
-    console.log(this.getWidth(), this.getHeight())
+  componentDidUpdate(prevProps) {
+    if (this.props.comp !== prevProps.comp) {
+      this.map.resize()
+      this.refreshPreview()
+    }
+  }
 
+  render() {
     return (
       <div style={{
         width: this.getWidth(),
@@ -74,7 +79,6 @@ class Map extends Component {
       >
         <canvas 
           ref={el => this.canvas = el} 
-          style={{background: "url('./images/bg.png')"}}
         />
         <div style={{
           height: 0,

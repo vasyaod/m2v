@@ -76,7 +76,7 @@ class Components extends Component {
                       }}
                       onDoubleClick={e => this.setState({compParams: comp})}
                     >
-                       <Comp comp={comp}/>}
+                       <Comp comp={comp}/>
                     </Rnd>
                   )
                 })}
@@ -100,8 +100,21 @@ class Components extends Component {
                     const Comp = compTemplate.props
                     return (<Comp
                       comp={this.state.compParams} 
-                      onChanged={params => this.props.dispatch(updateComponent(comp, params))}
-                      onClose={e => this.setState({compParams: null})}
+                      onChanged={ params => {
+                        const newParam = Object.assign({}, this.state.compParams.params, params)
+                        this.setState({
+                          compParams: Object.assign({}, this.state.compParams, {params: newParam})
+                        })
+                      }}
+                      onCanceled={() =>
+                        this.setState({compParams: null})
+                      }
+                      onApplyed={() => {
+                        this.props.dispatch(updateComponent(Object.assign({}, this.state.compParams, {
+                          params: null
+                        }), this.state.compParams.params))
+                        this.setState({compParams: null})
+                      }}
                     />)
                 })()}
               </div>
