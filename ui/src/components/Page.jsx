@@ -52,12 +52,6 @@ class Page extends Component {
               <Menu.Item as={Link} to="/geodata">
                 GEO Data
               </Menu.Item>
-              <Menu.Item as={Link} to="/mapviewport">
-                Map viewport
-              </Menu.Item>
-              <Menu.Item as={Link} to="/frameparams">
-                Frame parameters
-              </Menu.Item>
               <Menu.Item as={Link} to="/components">
                 Components
               </Menu.Item>
