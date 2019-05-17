@@ -12,10 +12,21 @@ class Props extends Component {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
+      center: this.props.params.center,
+      zoom: this.props.params.zoom,
       hash: false,
       preserveDrawingBuffer: true
     });
     this.map = map
+
+    map.on('moveend', e => {
+      var center = map.getCenter();
+      var zoom = map.getZoom();
+      this.props.onChanged({
+        center: [center.lng, center.lat],
+        zoom: zoom
+      })
+    })
   }
 
   params() {

@@ -13,6 +13,8 @@ class Map extends Component {
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
       hash: false,
+      center: this.props.params.center,
+      zoom: this.props.params.zoom,
       preserveDrawingBuffer: true
     });
     this.map = map
@@ -63,7 +65,16 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.comp !== prevProps.comp) {
+
+    if (this.props.params.center !== prevProps.params.center) {
+      this.map.setCenter(this.props.params.center);
+    }
+
+    if (this.props.params.zoom !== prevProps.params.zoom) {
+      this.map.setZoom(this.props.params.zoom)
+    }
+
+    if (this.props.params !== prevProps.params) {
       this.map.resize()
       this.refreshPreview()
     }
@@ -102,12 +113,6 @@ class Map extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    viewportWidth: state.viewport.width,
-    viewportHeight: state.viewport.height,
-    opacity: state.opacity,
-    mask: state.mask,
-    center: state.viewportPosition.center,
-    zoom: state.viewportPosition.zoom,
     data: state.points,
     paths: state.paths
   };

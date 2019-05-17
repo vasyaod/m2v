@@ -76,7 +76,10 @@ class Components extends Component {
                       }}
                       onDoubleClick={e => this.setState({compParams: comp})}
                     >
-                       <Comp comp={comp}/>
+                       <Comp 
+                          comp={comp}
+                          params={comp.params} 
+                       />
                     </Rnd>
                   )
                 })}
@@ -100,6 +103,7 @@ class Components extends Component {
                     const Comp = compTemplate.props
                     return (<Comp
                       comp={this.state.compParams} 
+                      params={this.state.compParams.params} 
                       onChanged={ params => {
                         const newParam = Object.assign({}, this.state.compParams.params, params)
                         this.setState({
