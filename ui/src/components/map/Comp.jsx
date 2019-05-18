@@ -95,6 +95,10 @@ class Map extends Component {
       this.map.resize()
       this.refreshPreview()
     }
+
+    if (this.props.currentTimePossition !== prevProps.currentTimePossition) {
+      this.renderPaths()
+    }
   }
 
   render() {
