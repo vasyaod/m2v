@@ -1,26 +1,16 @@
 import React, { Component } from 'react';
 import { Segment, Header, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import Map from './map/Comp.jsx'
-import MapProps from './map/Props.jsx'
-import HelloWorld from './hello-world/HelloWorld.jsx'
 import { Rnd } from "react-rnd"
 import { addComponent, updateComponent } from '../actions.js';
 import * as UUID from 'uuid-js';
+
+import { components } from './ComponentList.js'
 
 const style = {
   display: "flex",
   border: "solid 1px #ddd"
 };
-
-const components = [
-  { 
-    type: "map",
-    comp: Map,
-    props: MapProps,
-    defaultParams: require('./map/DefaultParams.js').default
-  }
-]
 
 class Components extends Component {
   
@@ -43,7 +33,6 @@ class Components extends Component {
   resize() {
     const width = this.frameContainer.clientWidth;
     const factor = (width / this.props.frameWidth)
-    console.log("!!!!!+", factor, width)
     this.setState({
       scale: factor
     })
@@ -101,6 +90,7 @@ class Components extends Component {
                         <Comp 
                             comp={comp}
                             params={comp.params} 
+                            currentTimePossition = {this.state.currentTimePossition}
                         />
                       </Rnd>
                     )
@@ -126,7 +116,8 @@ class Components extends Component {
                     const Comp = compTemplate.props
                     return (<Comp
                       comp={this.state.compParams} 
-                      params={this.state.compParams.params} 
+                      params={this.state.compParams.params}
+                      currentTimePossition = {this.state.currentTimePossition}
                       onChanged={ params => {
                         const newParam = Object.assign({}, this.state.compParams.params, params)
                         this.setState({

@@ -22,6 +22,19 @@ class Map extends Component {
     this.map.on("render", () => {
       this.refreshPreview()
     });
+
+    map.once('load', () => {
+      this.renderPaths()
+    })
+  }
+  
+  renderPaths() {
+    renderComposedPaths(
+      this.map, 
+      this.props.currentTimePossition, 
+      this.props.points, 
+      this.props.paths
+    )
   }
 
   refreshPreview() {
@@ -54,6 +67,10 @@ class Map extends Component {
     }
     
     ctx.drawImage(canvas1, 0, 0);
+    
+    if (this.props.onRendered != null) {
+      this.props.onRendered(this.canvas)
+    }
   }
 
   getWidth() {
@@ -113,7 +130,7 @@ class Map extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.points,
+    points: state.points,
     paths: state.paths
   };
 };

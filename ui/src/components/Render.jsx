@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Header, Input, Button, Form } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { renderComposedPaths } from '../render-utils.js';
 import { maxTime } from '../utils.js';
 import isElectron from 'is-electron';
 
@@ -11,6 +10,7 @@ import electron, { remote } from 'electron'
 
 //import CCapture from '../CCapture.js'
 import * as encoder from '../encoder-actions-server.js'
+import { components } from './ComponentList.js'
 
 const mapboxgl = require('mapbox-gl');
 
@@ -25,40 +25,9 @@ class Render extends Component {
   }
 
   componentDidMount() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoidnZhemhlc292IiwiYSI6ImNqdHBpdnUxcTA1NXk0MXBjMTl4OHJlOWgifQ.J262J1QTtrGIlylAXKTYSQ';
-
-    const map = new mapboxgl.Map({
-      container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      //style: 'https://maps.tilehosting.com/styles/basic/style.json?key=bArAycFckX61rnr3cjXd',
-      center: this.props.center,
-      zoom: this.props.zoom,
-      hash: false,
-      preserveDrawingBuffer: true
-    });
-    this.map = map
-    const self = this
-
-    this.map.on("render", function() {
-      self.refreshPreview()
-    })
-    
-    map.once('load', function () {
-      self.renderPaths()
-    })
-
     this.resize()
   }
   
-  renderPaths() {
-    renderComposedPaths(
-      this.map, 
-      this.state.currentTimePossition, 
-      this.props.points, 
-      this.props.paths
-    )
-  }
-
   startRenderingOfVideo() {
     console.log("Start rendering")
     
@@ -130,7 +99,6 @@ class Render extends Component {
     this.setState({
       currentTimePossition: value
     })
-    this.renderPaths()
   }
 
   resize() {
@@ -141,51 +109,9 @@ class Render extends Component {
     })
   }
 
-  refreshPreview() {
-    const canvas1 = this.mapContainer.querySelector('canvas');
+  renderComp(comp, compCanvas) {
     var ctx = this.frame.getContext('2d');
-    
-//     ctx.beginPath();
-//     ctx.rect(0, 0, this.frame.width, this.frame.height);
-//  //   ctx.fillStyle = "#009933";
-//     ctx.fill();
-
-    ctx.globalAlpha = this.props.opacity / 100;
-    if (this.props.mask == "circle") {
-      ctx.beginPath();
-      ctx.arc(
-        this.props.viewportX + canvas1.width / 2, 
-        this.props.viewportY + canvas1.height / 2, 
-        Math.min(canvas1.width / 2, canvas1.height / 2), 
-        0, Math.PI * 2, true);
-      ctx.clip();
-    }
-    
-    if (this.props.mask == "square") {
-      ctx.beginPath();
-      const d = Math.min(canvas1.width / 2, canvas1.height / 2)
-
-      ctx.rect(canvas1.width / 2 - d, 
-               canvas1.height / 2 - d, 
-               d * 2, 
-               d * 2);
-        ctx.clip();
-    }
-
-    ctx.drawImage(canvas1, this.props.viewportX, this.props.viewportY);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.viewportX !== prevProps.viewportX ||
-      this.props.viewportY !== prevProps.viewportY ||
-      this.props.viewportWidth !== prevProps.viewportWidth ||
-      this.props.viewportHeight !== prevProps.viewportHeight) {
-      this.refreshPreview()
-    }
-
-    if (this.props.data !== prevProps.data) {
-      this.renderPaths()
-    }
+    ctx.drawImage(compCanvas, comp.params.x, comp.params.y);
   }
 
   render() {
@@ -201,11 +127,20 @@ class Render extends Component {
                   position: "relative",
                   overflow: "hidden",
                 }}>
-                <div style={{
-                  height: this.props.viewportHeight,
-                  width: this.props.viewportWidth,
-                //  display: "none"
-                }} ref="mapContainer" ref={el => this.mapContainer = el}/>
+                  {this.props.components.map(comp => {
+                    const compTemplate = components.find(x => comp.type == x.type)
+                    const Comp = compTemplate.comp
+                    return (
+                      <div key={comp.id} ref={el => this[comp.id] = el}>
+                        <Comp 
+                            comp={comp}
+                            params={comp.params} 
+                            currentTimePossition = {this.state.currentTimePossition}
+                            onRendered={canvas => this.renderComp(comp, canvas)}
+                        />
+                      </div>
+                    )
+                  })}
               </div>
               <div 
                 ref={el => this.frameContainer = el} 
@@ -256,16 +191,9 @@ class Render extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    viewportWidth: state.viewport.width,
-    viewportHeight: state.viewport.height,
-    opacity: state.opacity,
-    mask: state.mask,
-    center: state.viewportPosition.center,
-    zoom: state.viewportPosition.zoom,
+    components: state.components,
     frameWidth: state.frame.width,
     frameHeight: state.frame.height,
-    viewportX: state.frame.viewportX,
-    viewportY: state.frame.viewportY,
     points: state.points,
     paths: state.paths
   };
