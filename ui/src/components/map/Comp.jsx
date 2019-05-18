@@ -44,8 +44,8 @@ class Map extends Component {
     this.canvas.width = canvas1.width;
     this.canvas.height = canvas1.height;
 
-    ctx.globalAlpha = this.props.comp.params.opacity/100;
-    if (this.props.mask == "circle") {
+    ctx.globalAlpha = this.props.params.opacity/100;
+    if (this.props.params.mask == "circle") {
       ctx.beginPath();
       ctx.arc(
         this.canvas.width / 2, 
@@ -55,7 +55,7 @@ class Map extends Component {
         ctx.clip();
     }
     
-    if (this.props.mask == "square") {
+    if (this.props.params.mask == "square") {
       ctx.beginPath();
       const d = Math.min(canvas1.width / 2, canvas1.height / 2)
 

@@ -8,5 +8,6 @@ export default {
     -122.39852498402325,
     37.47905226379979
   ],
-  zoom: 1
+  zoom: 1,
+  mask: "circle"
 }
