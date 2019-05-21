@@ -5,22 +5,10 @@ const initialState = {
   components: List([]),
   geoEditorCenter: [8.538961, 47.372476],
   geoEditorZoom: 1,
-  viewport: {
-    width: 200,
-    height: 200
-  },
-  viewportPosition: {
-    center: [8.538961,47.372476],
-    zoom: 1
-  },
   frame: {
     width: 1920,
     height: 1080,
-    viewportX: 0,
-    viewportY: 0
   },
-  mask: "circle",
-  opacity: 90,
   points: List([]),
   paths: List([]),
   currentPoint: -1
@@ -44,14 +32,6 @@ export function todoApp(state = initialState, action) {
             points: List(y.points)
           })
         })
-      })
-
-    case 'MAP_VIEWPORT_RESIZED':
-      return Object.assign({}, state, {
-        viewport: {
-          width: action.width,
-          height: action.height
-        }
       })
 
     case 'COMPONENT_ADDED':
@@ -79,16 +59,6 @@ export function todoApp(state = initialState, action) {
         frame: action.value
       })
      
-    case 'OPACITY_CHANGED':
-      return Object.assign({}, state, {
-        opacity: action.value
-      })
-    
-    case 'MASK_CHANGED':
-      return Object.assign({}, state, {
-        mask: action.value
-      })
-
     case 'GEO_EDITOR_CENTER_UPDATED':
       return Object.assign({}, state, {
         geoEditorCenter: action.value
@@ -97,11 +67,6 @@ export function todoApp(state = initialState, action) {
     case 'GEO_EDITOR_ZOOM_UPDATED':
       return Object.assign({}, state, {
         geoEditorZoom: action.value
-      })
-
-    case 'VIEWPORT_POSITION_UPDATED':
-      return Object.assign({}, state, {
-        viewportPosition: action.value
       })
 
     case 'POINTS_CHANGED':

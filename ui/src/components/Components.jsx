@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Button, Input } from 'semantic-ui-react'
+import { Segment, Header, Button, Input, Modal } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Rnd } from "react-rnd"
 import { addComponent, updateComponent, updateFrameWidth, updateFrameHeight } from '../actions.js';
@@ -110,32 +110,41 @@ class Components extends Component {
               </div>
             </Segment> 
             { this.state.compParams &&
-              <div>
-                {(() => {
-                    const compTemplate = components.find(x => x.type == this.state.compParams.type)
-                    const Comp = compTemplate.props
-                    return (<Comp
-                      comp={this.state.compParams} 
-                      params={this.state.compParams.params}
-                      currentTimePossition = {this.state.currentTimePossition}
-                      onChanged={ params => {
-                        const newParam = Object.assign({}, this.state.compParams.params, params)
-                        this.setState({
-                          compParams: Object.assign({}, this.state.compParams, {params: newParam})
-                        })
-                      }}
-                      onCanceled={() =>
-                        this.setState({compParams: null})
-                      }
-                      onApplyed={() => {
-                        this.props.dispatch(updateComponent(Object.assign({}, this.state.compParams, {
-                          params: null
-                        }), this.state.compParams.params))
-                        this.setState({compParams: null})
-                      }}
-                    />)
-                })()}
-              </div>
+              <Modal open={true} onClose={this.props.onCanceled}>
+                <Modal.Header>Select a Photo</Modal.Header>
+                <Modal.Content>
+                  <Segment basic>
+                    {(() => {
+                        const compTemplate = components.find(x => x.type == this.state.compParams.type)
+                        const Comp = compTemplate.props
+                        return (<Comp
+                          comp={this.state.compParams} 
+                          params={this.state.compParams.params}
+                          currentTimePossition = {this.state.currentTimePossition}
+                          onChanged={ params => {
+                            const newParam = Object.assign({}, this.state.compParams.params, params)
+                            this.setState({
+                              compParams: Object.assign({}, this.state.compParams, {params: newParam})
+                            })
+                          }}
+                        />)
+                    })()}
+                  </Segment>
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button onClick={() => this.setState({compParams: null})}>
+                    Cancel
+                  </Button>
+                  <Button basic onClick={() => {
+                    this.props.dispatch(updateComponent(Object.assign({}, this.state.compParams, {
+                      params: null
+                    }), this.state.compParams.params))
+                    this.setState({compParams: null})
+                  }}>
+                    Apply
+                  </Button>
+                </Modal.Actions>
+              </Modal>
             }
           </div>
           <div className="four wide column">
