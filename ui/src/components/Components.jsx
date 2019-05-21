@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Segment, Header, Button } from 'semantic-ui-react'
+import { Segment, Header, Button, Input } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Rnd } from "react-rnd"
-import { addComponent, updateComponent } from '../actions.js';
+import { addComponent, updateComponent, updateFrameWidth, updateFrameHeight } from '../actions.js';
 import * as UUID from 'uuid-js';
 
 import { components } from './ComponentList.js'
@@ -31,14 +31,14 @@ class Components extends Component {
   }
   
   resize() {
-    const width = this.frameContainer.clientWidth;
-    const factor = (width / this.props.frameWidth)
+    const factor = (this.width / this.props.width)
     this.setState({
       scale: factor
     })
   }
 
   componentDidMount() {
+    this.width = this.frameContainer.clientWidth
     this.resize()
   }
 
@@ -61,8 +61,8 @@ class Components extends Component {
                   ref={el => this.frame = el} 
                   style={{
                     position: "relative",
-                    width: this.props.frameWidth,
-                    height: this.props.frameHeight,
+                    width: this.props.width,
+                    height: this.props.height,
                     float: "left",
                     overflow: "hidden",
                     background: "url('./images/bg.png')"
@@ -139,7 +139,16 @@ class Components extends Component {
             }
           </div>
           <div className="four wide column">
-
+            <Segment basic>
+                <div><label>Frame width</label></div>
+                <Input type="number" 
+                      value={this.props.width}
+                      onChange={(e, data) => this.props.dispatch(updateFrameWidth(parseInt(data.value)))}/>
+                <div><label>Frame height</label></div>
+                <Input type="number" 
+                      value={this.props.height}
+                      onChange={(e, data) => this.props.dispatch(updateFrameHeight(parseInt(data.value)))}/>
+            </Segment>
           </div>
         </div>
       </div>
@@ -150,8 +159,8 @@ class Components extends Component {
 const mapStateToProps = (state) => {
   return {
     components: state.components,
-    frameWidth: state.frame.width,
-    frameHeight: state.frame.height,
+    width: state.frame.width,
+    height: state.frame.height,
   };
 };
 
