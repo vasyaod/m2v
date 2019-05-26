@@ -74,11 +74,11 @@ class Map extends Component {
   }
 
   getWidth() {
-    return this.props.comp.params.width
+    return this.props.params.width
   }
 
   getHeight() {
-    return this.props.comp.params.height
+    return this.props.params.height
   }
 
   componentDidUpdate(prevProps) {

@@ -33,6 +33,12 @@ class Props extends Component {
           value={this.props.params.height}
           onChange={(e, data) => this.props.onChanged({height: parseInt(data.value)})}
         />
+        <div><label>Text</label></div>
+        <Input 
+          type="text"
+          value={this.props.params.text}
+          onChange={(e, data) => this.props.onChanged({text: data.value})}
+        />
       </div>
     );
   }

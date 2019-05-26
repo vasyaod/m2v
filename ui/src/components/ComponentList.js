@@ -13,6 +13,6 @@ export let components = [
     type: "label",
     comp: require('./label/Comp.jsx').default,
     props: require('./label/Props.jsx').default,
-    defaultParams: require('./map/DefaultParams.js').default
+    defaultParams: require('./label/DefaultParams.js').default
   }
 ]

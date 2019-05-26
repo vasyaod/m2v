@@ -110,8 +110,18 @@ class Render extends Component {
   }
 
   renderComp(comp, compCanvas) {
-    var ctx = this.frame.getContext('2d');
-    ctx.drawImage(compCanvas, comp.params.x, comp.params.y);
+    // if (this.frame != null) {
+    //   var ctx = this.frame.getContext('2d');
+    //   ctx.drawImage(compCanvas, comp.params.x, comp.params.y);
+    // }
+    setTimeout(() => { this.renderComp2(comp, compCanvas) }, 0);
+  }
+  
+  renderComp2(comp, compCanvas) {
+    if (this.frame != null) {
+      var ctx = this.frame.getContext('2d');
+      ctx.drawImage(compCanvas, comp.params.x, comp.params.y);
+    }
   }
 
   render() {

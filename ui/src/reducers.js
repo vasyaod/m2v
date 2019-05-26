@@ -26,6 +26,7 @@ export function todoApp(state = initialState, action) {
     
     case 'PROJECT_LOADED':
       return Object.assign({}, action.state, {
+        components: List(action.state.components),
         points: List(action.state.points),
         paths: List(action.state.paths).map(y => {
           return Object.assign({}, y, {
@@ -35,9 +36,10 @@ export function todoApp(state = initialState, action) {
       })
 
     case 'COMPONENT_ADDED':
-      return Object.assign({}, state, {
+      return {
+        ...state,
         components: state.components.push(action.component)
-      })
+      }
     
     case 'COMPONENT_UPDATED':
       return {
@@ -52,6 +54,12 @@ export function todoApp(state = initialState, action) {
             return comp
           }
         })
+      }
+    
+    case 'COMPONENT_REMOVED':
+      return {
+        ...state,
+        components: state.components.filter(x => x.id != action.id)
       }
 
     case 'FRAME_CHANDED':

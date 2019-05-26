@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 //import 'style-loader!css-loader!../css/styles.css';
 import { Segment, Sidebar, Menu, Container } from 'semantic-ui-react'
-import MapViewport from './MapViewport.jsx'
 import GeoData from './GeoData.jsx'
-import FrameParams from './FrameParams.jsx'
 import Render from './Render.jsx'
 import Project from './Project.jsx'
 import Components from './Components.jsx'
@@ -63,9 +61,7 @@ class Page extends Component {
             <Sidebar.Pusher >
               <Route exact path="/" component={Project} />
               <Route path="/project" component={Project} />
-              <Route path="/mapviewport" component={MapViewport} />
               <Route path="/geodata" component={GeoData} />
-              <Route path="/frameparams" component={FrameParams} />
               <Route path="/components" component={Components} />
               <Route path="/render" component={Render} />
             </Sidebar.Pusher>
