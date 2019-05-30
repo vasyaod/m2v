@@ -76,26 +76,31 @@ app.get('/video/:encodeId', async (req, res) => {
   const outputFile = `${dir}/output.webm`
   const cmd = ffmpeg.path;
   
-  //ffmpeg -framerate 25 -f image2 -i frames/%03d.png -c:v libvpx -pix_fmt yuva420p output.webm
-  const args = [
-    "-framerate", 1,
-    "-pattern_type", "sequence",
-    "-start_number", "1",
-    "-i", `${dir}/frame-%d.png`,
-    "-c:v", "libvpx-vp9",
-    "-pix_fmt", "yuva420p",
-    "-y",
-    outputFile
-  ];
-
-  console.log(cmd + ' "' + args.join('" "') + '"');
-  var proc = spawn(cmd, args);
-  proc.on('close', function (code) {
-    var code = parseInt(code);
-    console.log("Return code: " + code)
-//    res.send('Ok')
+  // If file has already existed send it immediately
+  if (fs.existsSync(outputFile)) {
     res.download(resolve(outputFile), "map.webm", {headers: {'Content-Type': 'video/mp4'}})
-  });
+  } else {
+    //ffmpeg -framerate 25 -f image2 -i frames/%03d.png -c:v libvpx -pix_fmt yuva420p output.webm
+    const args = [
+      "-framerate", 1,
+      "-pattern_type", "sequence",
+      "-start_number", "1",
+      "-i", `${dir}/frame-%d.png`,
+      "-c:v", "libvpx-vp9",
+      "-pix_fmt", "yuva420p",
+      "-y",
+      outputFile
+    ];
+
+    console.log(cmd + ' "' + args.join('" "') + '"');
+    var proc = spawn(cmd, args);
+    proc.on('close', function (code) {
+      var code = parseInt(code);
+      console.log("Return code: " + code)
+  //    res.send('Ok')
+      res.download(resolve(outputFile), "map.webm", {headers: {'Content-Type': 'video/mp4'}})
+    });
+  }
 })
 
 process.on('SIGTERM', () => process.exit(0))

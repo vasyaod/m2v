@@ -50,7 +50,7 @@ class Render extends Component {
           })
         }, 0);
       } else {
-        this.stopRenderingOfVideo(encodeId)
+        this.finishRenderingOfVideo(encodeId)
       }
     }
     
@@ -70,7 +70,7 @@ class Render extends Component {
     }, 'image/png', 1.0 )
   }
 
-  stopRenderingOfVideo(encodeId) {
+  finishRenderingOfVideo(encodeId) {
     console.log("Stop rendering")
 
     if(isElectron()) {
