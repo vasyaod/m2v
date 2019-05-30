@@ -10,6 +10,8 @@ import electron, { remote } from 'electron'
 
 //import CCapture from '../CCapture.js'
 import * as encoder from '../encoder-actions-server.js'
+import * as config from '../config.js'
+
 import { components } from './ComponentList.js'
 
 const mapboxgl = require('mapbox-gl');
@@ -40,12 +42,13 @@ class Render extends Component {
       if (this.state.currentTimePossition < t) {
 //        requestAnimationFrame(render);
         this.setTimePosstion(this.state.currentTimePossition + 1)
-        this.refreshPreview() 
         // rendering stuff ...
-        const blob = this.frame.toBlob(async (blob) => {
-          await encoder.saveFrame(encodeId, this.state.currentTimePossition, blob)
-          render(encodeId)
-        })
+        setTimeout(() => {
+          const blob = this.frame.toBlob(async (blob) => {
+            await encoder.saveFrame(encodeId, this.state.currentTimePossition, blob)
+            render(encodeId)
+          })
+        }, 0);
       } else {
         this.stopRenderingOfVideo(encodeId)
       }
@@ -69,17 +72,16 @@ class Render extends Component {
 
   stopRenderingOfVideo(encodeId) {
     console.log("Stop rendering")
-    const url = "http://localhost:8882"
 
     if(isElectron()) {
       /* #!if isElectron */
       const ipcRenderer = electron.ipcRenderer
       ipcRenderer.send("download", {
-        url: `${url}/video/${encodeId}`
+        url: `${config.renderServerUrl}/video/${encodeId}`
       })
      /* #!endif */
     } else {
-      window.location.assign(`${url}/video/${encodeId}`);
+      window.location.assign(`${config.renderServerUrl}/video/${encodeId}`);
       this.setState({
         isRendering: false
       })

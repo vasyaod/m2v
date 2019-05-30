@@ -123,7 +123,7 @@ class Components extends Component {
             </Segment> 
             { this.state.compParams &&
               <Modal open={true} onClose={this.props.onCanceled}>
-                <Modal.Header>Select a Photo</Modal.Header>
+                <Modal.Header>Properties</Modal.Header>
                 <Modal.Content>
                   <Segment basic>
                     {(() => {
