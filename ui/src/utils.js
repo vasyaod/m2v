@@ -106,6 +106,15 @@ const pathFactory = (type) => {
   return simplePath
 }
 
+export const addPoints = async (oldPoints, paths, newPoints) => {
+  const point = newPoints.first()
+  const res = await addPoint(oldPoints, paths, point)
+  if(newPoints.size == 1) {
+    return res
+  } else {
+    return await addPoints(res.points, res.paths, newPoints.rest())
+  }
+}
 
 export const addPoint = async (points, paths, point) => {
   point.id = getNextId(points)

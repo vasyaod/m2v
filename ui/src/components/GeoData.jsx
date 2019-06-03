@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import {Resizable, ResizableBox } from 'react-resizable';
+import ReactFileReader from 'react-file-reader';
 //import 'style-loader!css-loader!../css/styles.css';
 import { Table, Segment, Input, Button, Icon, Checkbox, Container, Form, Select } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { updateGeoEditorCenter, updateGeoEditorZoom, addPoint, removePoint, replacePoint } from '../actions.js';
-
+import { updateGeoEditorCenter, updateGeoEditorZoom, addPoint, removePoint, replacePoint } from '../actions/actions.js';
+import { loadGpx } from '../actions/gpx-actions.js';
 import { renderComposedPaths } from '../render-utils.js';
 
 const utils = require('../utils.js');
 const mapboxgl = require('mapbox-gl');
+const gpxParse = require("../gpx/gpx-parse");
 
 class GeoData extends Component {
   
@@ -54,6 +55,24 @@ class GeoData extends Component {
     ]
   }
   
+  handleGpxFiles(files) {
+    console.log(this)
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      console.log("Restore project")
+      gpxParse.parseGpx(reader.result, (error, data) => {
+        //do stuff
+//        console.log("!!!!", data.tracks[0].segments[0])
+        this.props.dispatch(loadGpx(data))
+      });
+      
+    }
+    reader.readAsText(file)
+  }
+
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1IjoidnZhemhlc292IiwiYSI6ImNqdHBpdnUxcTA1NXk0MXBjMTl4OHJlOWgifQ.J262J1QTtrGIlylAXKTYSQ';
 
@@ -262,7 +281,6 @@ class GeoData extends Component {
       this.map.setCenter(this.props.center );
     }
     if (this.props.zoom !== prevProps.zoom) {
-      console.log("!!!", this.props.zoom)
       this.map.setZoom(this.props.zoom)
     }
  }
@@ -351,6 +369,12 @@ class GeoData extends Component {
                 options={this.layerOptions}
                 value={this.state.layer}
               />
+              <ReactFileReader fileTypes={[".gpx"]} handleFiles={this.handleGpxFiles.bind(this)}>
+                <Button>
+                  Import GPX
+                </Button>
+              </ReactFileReader>
+
               <Form.Input
                 style={{width: "100%"}} 
                 label={`Time: ${this.state.currentTimePossition}s `}
@@ -363,7 +387,8 @@ class GeoData extends Component {
               />
             </Segment>
           </div>
-          <div className="four wide column">
+          <div className="four wide column" style={{overflow: "scroll", height: "600px"}}>
+            <div >
             <Segment basic>
               <Table>
                 <Table.Header>
@@ -464,6 +489,7 @@ class GeoData extends Component {
                 </Table.Body>
               </Table>
             </Segment>
+            </div>
           </div>
         </div>
       </div>

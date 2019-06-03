@@ -1,6 +1,6 @@
 //import utils from './utils.js'
 import { List } from 'immutable'
-import * as utils from '../src/utils.js'
+import * as utils from '../utils.js'
 import * as equal from 'deep-equal'
 
 export function resetProject() {

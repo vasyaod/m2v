@@ -3,7 +3,7 @@ import { Segment, Header, Button, Container, Grid, Placeholder} from 'semantic-u
 import { connect } from 'react-redux'
 import ReactFileReader from 'react-file-reader';
 
-import { resetProject, loadProject } from '../actions.js';
+import { resetProject, loadProject } from '../actions/actions.js';
 
 class Project extends Component {
 

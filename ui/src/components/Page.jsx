@@ -7,7 +7,7 @@ import Project from './Project.jsx'
 import Components from './Components.jsx'
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import queryString from 'query-string';
-import { loadProjectFromUrl } from '../actions.js';
+import { loadProjectFromUrl } from '../actions/actions.js';
 import { connect } from 'react-redux'
 
 const mapboxgl = require('mapbox-gl');
