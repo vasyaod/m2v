@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Segment, Header, Button, Input, Modal, Select } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Rnd } from "react-rnd"
-import { addComponent, updateComponent, removeComponent, updateFrameWidth, updateFrameHeight } from '../actions.js';
+import { addComponent, updateComponent, removeComponent, updateFrameWidth, updateFrameHeight } from '../actions/actions.js';
 import * as UUID from 'uuid-js';
 
 import { components } from './ComponentList.js'
